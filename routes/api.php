@@ -34,7 +34,7 @@ Route::fallback(function () {
     ], 404);
 });
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware(['throttle:60,1'])->group(function () {
     Route::get('/test', function () {
         return response()->json(['message' => 'API is working']);
     });

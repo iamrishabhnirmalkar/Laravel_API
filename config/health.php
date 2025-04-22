@@ -161,12 +161,13 @@ return [
      */
     //'treat_skipped_as_failure' => false
 
-    'checks' => [
-        DatabaseCheck::new(),
-        RedisCheck::new(),
-        QueueCheck::new(),
-        UsedDiskSpaceCheck::new()
-            ->warnWhenUsedSpaceIsAbovePercentage(70)
-            ->failWhenUsedSpaceIsAbovePercentage(90),
-    ],
+    // 'checks' => [
+    //     DatabaseCheck::new(),
+    //     RedisCheck::new(),
+    //     QueueCheck::new(),
+    //     SomeHealthCheck::new(),
+    //     UsedDiskSpaceCheck::new()
+    //         ->warnWhenUsedSpaceIsAbovePercentage(70)
+    //         ->failWhenUsedSpaceIsAbovePercentage(90),
+    // ],
 ];

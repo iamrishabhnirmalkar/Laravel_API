@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('api_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('ip');
-    $table->string('method');
-    $table->string('url');
-    $table->text('user_agent')->nullable();
-    $table->unsignedBigInteger('user_id')->nullable();
-    $table->timestamps();
+            $table->string('ip')->nullable();
+            $table->string('method')->nullable();
+            $table->text('url')->nullable();
+            $table->text('user_agent')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->timestamps();
         });
     }
 

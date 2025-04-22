@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
+use App\Models\ApiLog;
+
 
 
 class LogApiRequests
@@ -17,19 +19,27 @@ class LogApiRequests
      */
     public function handle(Request $request, Closure $next)
     {
-        $ip = $request->ip();
-        $method = $request->method();
-        $url = $request->fullUrl();
-        $userAgent = $request->userAgent();
+        if ($request->is('health')) {
+            return $next($request);
+        }
+        // Log the request after the response is sent
+        $response = $next($request);
 
-        Log::channel('daily')->info('API Hit', [
-            'ip' => $ip,
-            'method' => $method,
-            'url' => $url,
-            'user_agent' => $userAgent,
-            'user_id' => optional($request->user())->id,
-        ]);
+        try {
+            ApiLog::create([
+                'ip'         => $request->ip(),
+                'method'     => $request->method(),
+                'url'        => $request->fullUrl(),
+                'user_agent' => $request->userAgent(),
+                'user_id'    => optional($request->user())->id,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to log API request', [
+                'message' => $e->getMessage(),
+                'trace'   => $e->getTraceAsString(),
+            ]);
+        }
 
-        return $next($request);
+        return $response;
     }
 }
